@@ -2,7 +2,7 @@ var conexion = require("./conexion_mysql.js");
 
 var express = require("express");
 var jwt = require("jwt-simple");
-var clave = "miSecretoMasOscuro";
+var clave = process.env.JWT_SECRET || "miSecretoMasOscuro";
 var app = express();
 
 var cors = require("cors");
@@ -13,44 +13,6 @@ app.use("/appCliente", express.static("cliente_rest"));
 app.use(express.json());
 
 
-app.get("/api/ubicaciones", function(req, res) {
-  var sql = "SELECT * FROM ubicaciones";
-
-  conexion.query(sql, function(err, ubicaciones) {
-    if (err) {
-      console.log("Error al obtener las ubicaciones:", err);
-      res.status(500).json("Error al realizar la consulta");
-    } else {
-      res.status(200).json(ubicaciones);
-    }
-  });
-});
-
-app.get("/api/categorias", function(req, res) {
-  var sql = "SELECT * FROM categorias";
-
-  conexion.query(sql, function(err, categorias) {
-    if (err) {
-      console.log("Error al obtener las categorias:", err);
-      res.status(500).json("Error al realizar la consulta");
-    } else {
-      res.status(200).json(categorias);
-    }
-  });
-});
-
-app.get("/api/modelos", function(req, res) {
-  var sql = "SELECT * FROM modelos";
-
-  conexion.query(sql, function(err, modelos) {
-    if (err) {
-      console.log("Error al obtener los modelos:", err);
-      res.status(500).json("Error al realizar la consulta");
-    } else {
-      res.status(200).json(modelos);
-    }
-  });
-});
 
 app.post("/api/gestores/login", (req, res) => {
 
@@ -153,6 +115,45 @@ app.use("/api", function(req, res, next) {
 
         res.status(401).json("Token no válido.");
     }
+});
+
+app.get("/api/ubicaciones", function(req, res) {
+  var sql = "SELECT * FROM ubicaciones";
+
+  conexion.query(sql, function(err, ubicaciones) {
+    if (err) {
+      console.log("Error al obtener las ubicaciones:", err);
+      res.status(500).json("Error al realizar la consulta");
+    } else {
+      res.status(200).json(ubicaciones);
+    }
+  });
+});
+
+app.get("/api/categorias", function(req, res) {
+  var sql = "SELECT * FROM categorias";
+
+  conexion.query(sql, function(err, categorias) {
+    if (err) {
+      console.log("Error al obtener las categorias:", err);
+      res.status(500).json("Error al realizar la consulta");
+    } else {
+      res.status(200).json(categorias);
+    }
+  });
+});
+
+app.get("/api/modelos", function(req, res) {
+  var sql = "SELECT * FROM modelos";
+
+  conexion.query(sql, function(err, modelos) {
+    if (err) {
+      console.log("Error al obtener los modelos:", err);
+      res.status(500).json("Error al realizar la consulta");
+    } else {
+      res.status(200).json(modelos);
+    }
+  });
 });
 
 app.put("/api/gestores/:id", function(req, res) {
@@ -314,6 +315,7 @@ app.post("/api/recursos", function(req, res) {
     INSERT INTO recursos
     (categoria, modelo, ubicacion, numero_serie, estado)
     VALUES (?, ?, ?, ?, ?)
+    RETURNING id
   `;
 
   var valores = [
@@ -427,6 +429,7 @@ app.post("/api/areas", function(req, res){
     INSERT INTO areas
     (codigo, nombre, gestor)
     VALUES (?, ?, ?)
+    RETURNING id
   `;
 
   var valores = [
@@ -490,6 +493,8 @@ app.get("/api/reservas/ministerio", function(req, res) {
   });
 });
 
-app.listen(3000, () => {
-  console.log('Servidor en http://localhost:3000');
+var puerto = process.env.PORT || 3000;
+
+app.listen(puerto, () => {
+  console.log("Servidor escuchando en el puerto " + puerto);
 });

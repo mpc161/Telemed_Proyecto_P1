@@ -156,7 +156,6 @@ function modificarUsuario() {
     rest.put(urlConToken(servidorREST + "/api/gestores/" + idGestorActual), gestor, function(estado, respuesta) {
         if (estado == 201) {
             alert("Se han actualizado correctamente los datos.");
-            idGestorActual = respuesta.id;
             cambiarSeccion('home');
         } else {
             alert("No se han actualizado los datos del gestor.")
