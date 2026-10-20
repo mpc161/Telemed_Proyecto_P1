@@ -1,4 +1,4 @@
-var servidorREST = "http://localhost:3000";
+var servidorREST = "https://telemed-proyecto-p1.onrender.com";
 var seccionActual = "acceso";
 var idGestorActual = null;
 var idRecursoActual = null;
