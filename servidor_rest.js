@@ -4,6 +4,12 @@ var express = require("express");
 var jwt = require("jwt-simple");
 var clave = process.env.JWT_SECRET || "miSecretoMasOscuro";
 var app = express();
+app.use(express.static("cliente_rest"));
+app.get("/", function(req, res) {
+    res.sendFile(
+        __dirname + "/cliente_rest/index.html"
+    );
+});
 
 var cors = require("cors");
 app.use(cors());

@@ -674,6 +674,122 @@ function mostrarRankingAreas() {
     );
 }
 
+
+function contarRegistrosConUnaReservaPorArea() {
+
+    var idArea =
+        Number(
+            document.getElementById(
+                "id_area_buscar"
+            ).value
+        );
+
+    if (!idArea) {
+        alert("Introduce un ID de área válido.");
+        return;
+    }
+
+    rest.get(
+        "https://undefined.ua.es/telemedicina/api/datos",
+
+        function(estado, respuesta) {
+
+            if (estado != 200) {
+                alert("Error al obtener los datos.");
+                return;
+            }
+
+            var contador = {};
+
+            for (var i = 0; i < respuesta.length; i++) {
+
+                var envio = respuesta[i];
+
+                if (contador[idArea] == undefined) {
+                    contador[idArea] = 0;
+                }
+
+                if (
+                    Array.isArray(envio.datos) &&
+                    envio.datos.length == 1
+                ) {
+                    contador[idArea]++;
+                }
+            }
+
+
+            var nombre =
+                nombres[idArea] ||
+                ("Área " + idArea);
+
+            alert(
+                nombre +
+                ": " +
+                contador[idArea] +
+                " registros con una sola reserva"
+            );
+
+        }
+    );
+}
+
+
+
+function mediaHorasEstimadasArea9() {
+
+    var suma = 0;
+
+    var cantidad = 0;
+
+    rest.get(
+        "https://undefined.ua.es/telemedicina/api/datos",
+
+        function(estado, respuesta) {
+
+            if (estado != 200) {
+                alert("Error al obtener los datos.");
+                return;
+            }
+
+            for (
+                var i = 0;
+                i < respuesta.length;
+                i++
+            ) {
+
+                var envio =
+                    respuesta[i];
+
+                if (
+                    Number(envio.id_area)== 9
+                    &&
+                    Array.isArray(envio.datos)
+                ) {
+
+                    for (var j = 0;j < envio.datos.length;j++) {
+
+                        suma +=Number(envio.datos[j].horas_estimadas)|| 0;
+                        cantidad++;
+                    }
+                }
+            }
+
+            var media = 0;
+
+            if (
+                cantidad > 0
+            ) {media =suma /cantidad;}
+
+            alert(
+                "La medida de horas estimadas de uso de las reservas del área Hematología es: "+media.toFixed(2)
+            );
+        }
+    );
+}
+
+
+
+
 function urlConToken(url) {
 
     if (tokenJWT == null) {

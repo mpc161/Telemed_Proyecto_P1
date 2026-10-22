@@ -212,6 +212,21 @@ label {
         <button onclick="enviarReservasMinisterio()">
             Enviar reservas al Ministerio
         </button>
+        <br><br>
+        <input
+            type="number"
+            id="id_area_buscar"
+            placeholder="ID del área"
+        >
+
+        <button onclick="contarRegistrosConUnaReservaPorArea()">
+            Consultar registros del área
+        </button>
+        <button onclick="mediaHorasEstimadasArea9()">
+            Calculo media horas estimadas
+        </button>
+
+        <br><br>
         <h3 style="margin-top: 24px;">
             <strong>Ranking de reservas por área médica</strong>
         </h3>
@@ -298,7 +313,6 @@ label {
         <div>Apellidos: <input id="mod_apellidos" /></div>
         <div>Login: <input id="mod_usuario" /></div>
         <div>Contraseña: <input id="mod_contraseña" type="password" /></div>
-        <!-- Corregido: antes llamaba a cambiarSeccion dentro del onclick -->
         <button onclick="modificarUsuario()">Guardar</button>
         <button onclick="cambiarSeccion('acceso')">Cancelar</button>
     </div>
@@ -419,3 +433,5 @@ label {
 
 </body>
 </html>
+
+
